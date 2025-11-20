@@ -24,7 +24,7 @@ const AllUsers = () => {
       <h1 className="text-4xl mb-4">Los datos de los usarios son:</h1>
       {
         usersData.map((user) => (
-          <div className="flex flex-row gap-3 border-2 p-4 rounded-2xl items-center">
+          <div key={user.firstName} className="flex flex-row gap-3 border-2 p-4 rounded-2xl items-center">
             <p>{`Nombre: ${user.firstName}`}</p>
             <p>{`Apellido: ${user.lastName}`}</p>
             <p>{`Correo: ${user.email}`}</p>

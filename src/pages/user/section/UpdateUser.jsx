@@ -41,7 +41,7 @@ const UpdateUser = () => {
 
     axios.put(`http://localhost:8080/api/usuarios/${id}`, userDto)
       .then((response) => {
-        console.log(`Usuario actualizado ${response}`)
+        console.log(`Usuario id ${response.data.id} actualizado con nuevo nombre ${response.data.firstName} apellido ${response.data.lastName} correo ${response.data.email}`)
       })
       .catch((err) => {
         console.error(`No se ha podido actualizar el usuario ${err}`)

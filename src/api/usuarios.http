@@ -1,0 +1,5 @@
+@baseUrl = {{baseUrl}}
+
+### Obtener todos los usuarios
+GET http://localhost:8080/api/usuarios
+Content-Type: application/json
