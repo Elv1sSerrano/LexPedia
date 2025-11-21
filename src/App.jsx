@@ -1,17 +1,9 @@
-import { Outlet, useLocation } from "react-router-dom"
-import NavBar from "./components/NavBar"
+import { Outlet } from "react-router-dom"
 
 function App() {
 
-  const location = useLocation()  
-  const currentLocation = location.pathname
-  const unvalidLocations = ["login", "registro"]
-
-  const showNavBar = !unvalidLocations.includes(currentLocation)
-
   return (
-    <main>
-      {showNavBar && <NavBar />}
+    <main>      
       <Outlet />
     </main>
   )

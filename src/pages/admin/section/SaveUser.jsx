@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useState } from "react"
-import RegisterFormField from "../components/RegisterFormField"
+import RegisterFormField from "../../user/components/RegisterFormField"
 
 const SaveUser = () => {
 

@@ -3,15 +3,11 @@ import { useState } from "react"
 import {
   MessageCircle,
   ThumbsUp,
-  ThumbsDown,
-  MoreHorizontal,
+  ThumbsDown,  
   Bold,
   Italic,
-  Underline,
-  Paperclip,
-  ImageIcon,
-  Smile,
-  AtSign,
+  Underline,    
+  Smile,  
 } from "lucide-react"
 
 const CommentsSection = ({comments}) => {

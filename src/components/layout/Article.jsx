@@ -6,7 +6,7 @@ import { articles } from "../../db"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle, FileText, Scale, Calendar, Bookmark } from "lucide-react"
-import CommentsSection from "@/components/CommentsSections"
+import CommentsSection from "@/components/layout/CommentsSections"
 
 const Article = () => {  
 

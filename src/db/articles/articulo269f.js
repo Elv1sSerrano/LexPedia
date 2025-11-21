@@ -33,7 +33,6 @@ const articulo269F = {
     comentario1,
   ],
   totalCount: 1,
-
 }
 
 export default articulo269F

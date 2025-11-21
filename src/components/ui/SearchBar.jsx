@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { searchPath } from "../constants/iconPaths"
-import Icon from "./Icon"
+import { searchPath } from "@/constants/iconPaths"
+import Icon from "@/components/utils/Icon"
 
 const SearchBar = () => {
 

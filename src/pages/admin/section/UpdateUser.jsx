@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import RegisterFormField from "../components/RegisterFormField"
+import RegisterFormField from "../../user/components/RegisterFormField"
 
 const UpdateUser = () => {
   
