@@ -1,14 +1,14 @@
 import { caretDownPath } from "../constants/iconPaths"
 import Icon from "./Icon"
 import fotoPerfil from "../assets/images/fotoPerfil.png"
+import { Link } from "react-router-dom"
 
 const userData = [
   {id: 1, name: "Elvis", email: "elvis@gmail.com", passwordHash: "adfasfasf", fechaRegistro: new Date("2025-11-19T21:54:00"), estado: "activo", articulosGuardados: []}
 ]
 
 const userNavBar = [
-  {name: "Inicio"},
-  {name: "Buscar"},
+  {name: "Inicio"},  
   {name: "Guardados"},
 ]
 
@@ -20,7 +20,9 @@ const NavBar = () => {
         <p className="text-2xl font-semibold mr-8">📓 LexPedia</p>
         <ul className="flex flex-row gap-6 items-center">                  
           {userNavBar.map((item) => (
-            <li className="text-[#f1f7fe] font-medium">{item.name}</li>  
+            <Link to={`/${item.name}`}>
+              <li key={item.name} className="text-[#f1f7fe] font-medium">{item.name}</li>  
+            </Link>
           ))}
         </ul>
       </div>      

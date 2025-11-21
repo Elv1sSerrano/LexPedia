@@ -10,10 +10,10 @@ function App() {
   const showNavBar = !unvalidLocations.includes(currentLocation)
 
   return (
-    <body>
+    <main>
       {showNavBar && <NavBar />}
       <Outlet />
-    </body>
+    </main>
   )
 }
 
