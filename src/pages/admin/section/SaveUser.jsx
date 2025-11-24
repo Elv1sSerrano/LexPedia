@@ -37,7 +37,7 @@ const SaveUser = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <form className="flex flex-col gap-2 items-center" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
         {
           formFields.map((field, index) => (
             <RegisterFormField key={index} {...field} />

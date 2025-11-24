@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  font-family:'Merriweather', Avenir, Helvetica, Arial, sans-serif;
+  font-family:'Poppins', Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 

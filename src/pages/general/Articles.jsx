@@ -8,7 +8,8 @@ const articles = [
   {id: "articulo269C", image: fotoArticulo, label: "Procesos", date: "Julio 20, 2025", title: "Artículo 269 F", shortDescription: "El que, sin estar facultado para ello, con provecho propio o de un tercero, obtenga, compile, sustraiga, ofrezca, venda, intercambie, envíe, compre, intercepte, divulgue, modifique o emplee códigos personales, datos personales contenidos en ficheros, archivos, bases de datos o medios semejantes, incurrirá en pena de prisión de cuarenta y ocho (48) a noventa y seis (96) meses y en multa de 100 a 1000 salarios mínimos legales mensuales vigentes."},  
 ]
 
-const Home = () => {
+const Articles = () => {
+
   return (
     <section className="p-4 flex flex-col gap-6">      
       <SearchBar />
@@ -22,4 +23,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Articles

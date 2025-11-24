@@ -1,14 +1,53 @@
 // import axios from "axios"
 // import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { articles } from "../../db"
 
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle, FileText, Scale, Calendar, Bookmark } from "lucide-react"
 import CommentsSection from "@/components/layout/CommentsSections"
+import { useRoleContext } from "@/context/roles/roleContext"
+import EditArticle from "@/pages/moderator/sections/EditArticle"
+import { useState } from "react"
+import DeleteModal from "@/pages/moderator/components/DeleteModal"
+import { toast } from "react-toastify"
 
 const Article = () => {  
+
+  const navigate = useNavigate()
+
+  const role = useRoleContext()
+  const validRoles = role === "MODERATOR" 
+  ? true 
+  : role === "ADMIN"
+  ? true
+  : false  
+
+  const [isOpenEdit, setIsOpenEdit] = useState(false)
+  const [isOpenDelete, setIsOpenDelete] = useState(false)
+
+  const handleEdit = () => {
+    if(validRoles) setIsOpenEdit(true)
+  }
+
+  const closeEdit = () => {
+    setIsOpenEdit(false)
+  }
+
+  const handleDelete = () => {
+    if(validRoles) setIsOpenDelete(true)
+  }  
+
+  const deleteArticle = () => {
+    toast.success("Artículo borrado correctamente")   
+    navigate("/", { replace: true }) 
+  }
+
+  const cancel = () => {
+    setIsOpenDelete(false)
+  }
+
 
   const { articuloId } = useParams()
   const data = articles[articuloId]
@@ -26,6 +65,13 @@ const Article = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="space-y-4">
+          {
+            validRoles && 
+            <div className="flex justify-between">
+              <button onClick={ handleEdit } className="px-2 py-1 bg-amber-400 cursor-pointer rounded-xl">Editar</button>
+              <button onClick={ handleDelete } className="px-2 py-1 bg-red-400 cursor-pointer rounded-xl">Eliminar</button>
+            </div>
+          }          
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -185,6 +231,9 @@ const Article = () => {
 
         {/* Comments */}
         <CommentsSection comments={data.comments}/>
+
+        {isOpenEdit && <EditArticle close={closeEdit} />}
+        {isOpenDelete && <DeleteModal deleteArticle={deleteArticle} cancel={cancel} />}
       </main>
   )
 }

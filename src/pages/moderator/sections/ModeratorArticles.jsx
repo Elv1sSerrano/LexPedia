@@ -1,0 +1,25 @@
+import ArticleCard from "@/components/ui/ArticleCard"
+import SearchBar from "@/components/ui/SearchBar"
+import fotoArticulo from "@/assets/images/fotoArticulo.jpg"
+
+const articles = [
+  {id: "articulo269f", image: fotoArticulo, label: "Procesos", date: "Julio 20, 2025", title: "Artículo 269 F", shortDescription: "El que, sin estar facultado para ello, con provecho propio o de un tercero, obtenga, compile, sustraiga, ofrezca, venda, intercambie, envíe, compre, intercepte, divulgue, modifique o emplee códigos personales, datos personales contenidos en ficheros, archivos, bases de datos o medios semejantes, incurrirá en pena de prisión de cuarenta y ocho (48) a noventa y seis (96) meses y en multa de 100 a 1000 salarios mínimos legales mensuales vigentes."},
+  {id: "articulo269A", image: fotoArticulo, label: "Procesos", date: "Julio 20, 2025", title: "Artículo 269 F", shortDescription: "El que, sin estar facultado para ello, con provecho propio o de un tercero, obtenga, compile, sustraiga, ofrezca, venda, intercambie, envíe, compre, intercepte, divulgue, modifique o emplee códigos personales, datos personales contenidos en ficheros, archivos, bases de datos o medios semejantes, incurrirá en pena de prisión de cuarenta y ocho (48) a noventa y seis (96) meses y en multa de 100 a 1000 salarios mínimos legales mensuales vigentes."},  
+  {id: "articulo269C", image: fotoArticulo, label: "Procesos", date: "Julio 20, 2025", title: "Artículo 269 F", shortDescription: "El que, sin estar facultado para ello, con provecho propio o de un tercero, obtenga, compile, sustraiga, ofrezca, venda, intercambie, envíe, compre, intercepte, divulgue, modifique o emplee códigos personales, datos personales contenidos en ficheros, archivos, bases de datos o medios semejantes, incurrirá en pena de prisión de cuarenta y ocho (48) a noventa y seis (96) meses y en multa de 100 a 1000 salarios mínimos legales mensuales vigentes."},  
+]
+
+const ModeratorArticles = () => {
+  return (
+    <section className="p-4 flex flex-col gap-6">      
+      <SearchBar />
+      <h1 className="text-4xl font-bold">Últimos artículos publicados</h1>
+      <section className="grid grid-cols-3 gap-4">
+        {articles.map((article) => (          
+            <ArticleCard key={article.id} {...article} />
+        ))}
+      </section>
+    </section>
+  )
+}
+
+export default ModeratorArticles

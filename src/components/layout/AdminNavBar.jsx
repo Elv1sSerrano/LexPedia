@@ -9,13 +9,14 @@ import { Link } from "react-router-dom"
 
 const moderatorData = {
   fotoPerfil: fotoPerfil,
-  name: "Julian P"
+  name: "Admin",
 }
 
 const modaratorNavLinks = [
-  {name: "Tareas", direction: "tasks"},
-  {name: "Crear artículo", direction: "create"},
-  {name: "Artículos", direction: "articulos"},
+  {name: "Dashboard", direction: "dashboard"},
+  {name: "Tabla", direction: "tabla"},
+  {name: "Crear usuario", direction: "crear"},
+  {name: "Articulos", direction: "articulos"},
 ]
 
 const modalData = [
@@ -23,8 +24,7 @@ const modalData = [
   {icon: <LogOut /> , name: "Cerrar Sesión", action: ""}
 ]
 
-const ModeratorNavBar = () => {
-
+const AdminNavBar = () => {
   const [isOpen, setIsOpen] = useState(false)
   
   const handleOpenSettings = () => {
@@ -37,7 +37,7 @@ const ModeratorNavBar = () => {
         <p className="text-2xl font-semibold mr-8">📓 LexPedia</p>
         <ul className="flex flex-row gap-6 items-center">                  
           {modaratorNavLinks.map((item) => (
-            <Link key={item.name} to={`/moderator/${item.direction}`}>
+            <Link key={item.name} to={`/admin/${item.direction}`}>
               <li key={item.name} className="text-[#f1f7fe] font-medium">{item.name}</li>  
             </Link>
           ))}
@@ -55,4 +55,4 @@ const ModeratorNavBar = () => {
   )
 }
 
-export default ModeratorNavBar
+export default AdminNavBar

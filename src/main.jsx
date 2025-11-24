@@ -10,7 +10,7 @@ import UserProfile from './pages/admin/section/UserProfile.jsx'
 import AllUsers from './pages/admin/section/AllUsers.jsx'
 import UpdateUser from './pages/admin/section/UpdateUser.jsx'
 import Register from './pages/register/Register.jsx'
-import Home from './pages/user/section/Home.jsx'
+import Articles from './pages/general/Articles.jsx'
 import Article from './components/layout/Article.jsx'
 import Saved from './pages/user/section/Saved'
 import ProtectedRoute from './routes/ProtectedRoute'
@@ -19,6 +19,11 @@ import UserLayout from './pages/user/UserLayout'
 import AdminLayout from './pages/admin/AdminLayout'
 import ModeratorLayout from './pages/moderator/ModeratorLayout'
 import Tasks from './pages/moderator/sections/Tasks'
+import UploadArticle from './pages/moderator/sections/UploadArticle'
+import ModeratorArticles from './pages/moderator/sections/ModeratorArticles'
+import RoleProvider from './context/roles/RoleProvider'
+import Dashboard from './pages/admin/section/Dashboard'
+import TableTasks from './pages/admin/section/TableTasks'
 
 // Simula obtener el rol del usuario autenticado
 export const useAuth = () => {
@@ -27,8 +32,8 @@ export const useAuth = () => {
   // return { isAuthenticated: !!user, role: user?.role };
 
   // **Ejemplo Hardcodeado:**
-  const isAuth = true; // Simula que está autenticado
-  const userRole = "MODERATOR"; // Puede ser "USER", "ADMIN", "MODERATOR", etc.
+  const isAuth = false; // Simula que está autenticado
+  const userRole = ""; // Puede ser "USER", "ADMIN", "MODERATOR", etc.
   return { isAuth, userRole };
 };
 
@@ -41,6 +46,7 @@ const router = createBrowserRouter([
             // Rutas públicas (Login, Register, etc.)            
             { path: "login", element: <Login /> },
             { path: "registro", element: <Register /> },
+            { path: "artículos", element: <Articles /> },
             { path: "404", element: <h1 className='text-6xl text-center font-bold'>Acceso Denegado 😡</h1>},
 
             // Redirección principal: si está autenticado, redirige al dashboard del rol
@@ -65,7 +71,7 @@ const router = createBrowserRouter([
                   // Ruta por defecto para /user. Se renderiza en el <Outlet /> de UserLayout
                   index: true, 
                   path: "",
-                  element: <Home /> 
+                  element: <Articles /> 
                 },
                 {
                   // Ruta para /user/perfil
@@ -90,14 +96,37 @@ const router = createBrowserRouter([
                 </ProtectedRoute>,
                 // Subrutas de Admin, por ejemplo:
                 children: [
-                    { path: "usuarios", element: <AllUsers /> }, // /admin/usuarios
-                    // ... otras rutas de admin
+                    { 
+                      index: true,
+                      path: "", 
+                      element: <Dashboard /> 
+                    },
+                    {                       
+                      path: "dashboard", 
+                      element: <Dashboard /> 
+                    },
+                    {                       
+                      path: "tabla", 
+                      element: <TableTasks /> 
+                    },
+                    {                       
+                      path: "crear", 
+                      element: <SaveUser /> 
+                    },
+                    {                       
+                      path: "articulos", 
+                      element: <Articles /> 
+                    },
+                    {
+                      path: "articulos/articulo/:articuloId", 
+                      element: <Article />
+                    }
                 ]
             },
             {
                 path: "moderator/*", 
                 element: (
-                  <ProtectedRoute allowedRoles={["MODERATOR", "ADMIN"]}> 
+                  <ProtectedRoute allowedRoles={["MODERATOR"]}> 
                       <ModeratorLayout /> 
                   </ProtectedRoute>
                 ),
@@ -109,6 +138,18 @@ const router = createBrowserRouter([
                   {
                     path: "tasks",
                     element: <Tasks />                     
+                  },
+                  {
+                    path: "create",
+                    element: <UploadArticle />
+                  },
+                  {
+                    path: "articulos",
+                    element: <ModeratorArticles />
+                  },
+                  {
+                    path: "articulos/articulo/:articuloId", 
+                    element: <Article />
                   }
                 ]
             },            
@@ -119,6 +160,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <RoleProvider>
+      <RouterProvider router={router} />
+    </RoleProvider>
   </StrictMode>,
 )
