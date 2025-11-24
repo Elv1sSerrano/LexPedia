@@ -72,7 +72,7 @@ const CommentsSection = ({comments}) => {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <h3 className="text-lg font-semibold">Comentarios</h3>
-          <span className="bg-orange-600 text-white text-xs font-semibold rounded-full px-3 py-1">{comments.length}</span>
+          <span className="bg-orange-600 text-white text-xs font-semibold rounded-full px-3 py-1">{comments?.length}</span>
         </div>
         <div className="flex items-center gap-2">
           <MessageCircle className="w-4 h-4 text-muted-foreground" />
@@ -90,7 +90,7 @@ const CommentsSection = ({comments}) => {
 
       {/* Comments List */}
       <div className="space-y-6">
-        {comments.map((comment) => (
+        {comments?.map((comment) => (
           <div key={comment.id} className="flex gap-4">
             {/* Avatar */}
             <img

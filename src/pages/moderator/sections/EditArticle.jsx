@@ -5,10 +5,92 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Edit, ArrowRight } from "lucide-react"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import { useNavigate, useParams } from "react-router-dom"
+import Loader from "@/components/ui/Loader"
+import { toast } from "react-toastify"
 
 
 const EditArticle = ({close}) => {
 
+  const navigate = useNavigate()
+
+  const { articuloId } = useParams()  
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [ articleData, setArticleData ] = useState({
+      numeroArticulo: "",
+      nombreDelDelito: "",
+      codigoPenal: "",
+      tituloCodigoPenal: "",
+      leyDeInclusion: "",
+      fechaVigencia: "",
+      bienJuridicoTutelado: "",
+      objetoMaterial: "",
+      elementoSubjetivo: "",
+      shortDescription: "",
+      penaPrisionMinima: "",
+      penaPrisionMaxima: "",
+      multaMinima: "",
+      multaMaxima: "",
+      circunstanciasAgravacion: "",
+      estadoPublicacion: "PUBLICADO",
+      label: "",
+      image: "",
+  })
+
+  useEffect(() => {
+    
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/articulos/${articuloId}`)
+        setArticleData(response.data)        
+      } catch (err) {
+        console.error(err)
+      }
+    } 
+
+    fetchData()
+
+  }, [])
+
+    const handleSubmit = async (e) => {
+      e.preventDefault()
+      setIsSubmitting(true)
+
+      const dto = {
+        ...articleData
+      }      
+
+      try {
+        axios.put(`http://localhost:8080/api/articulos/${articuloId}`, dto)
+        toast.success("Artículo actualizado con éxito")        
+      } catch (err) {
+        toast.error("No se ha podido editar el artículo")
+        console.error(err)
+      } finally {
+        setIsSubmitting(false)
+      }
+
+    }
+
+    const handleInputChange = (e) => {
+      const { name, value } = e.target
+      setArticleData((prev) => ({
+        ...prev,
+        [name]: value,
+      }))
+    }
+  
+    const handleSelectChange = (name, value) => {
+      setArticleData((prev) => ({
+        ...prev,
+        [name]: value,
+      }))
+    }    
+
+    if(isSubmitting) return <Loader />
 
   return (
     <section className="fixed inset-2 bg-black z-50 ">
@@ -25,7 +107,7 @@ const EditArticle = ({close}) => {
           </p>
         </div>
 
-        <form onSubmit={""} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
           <Card>
             <CardHeader>
@@ -40,8 +122,8 @@ const EditArticle = ({close}) => {
                     id="numeroArticulo"
                     name="numeroArticulo"
                     placeholder="e.g., 269 F"
-                    value={"formData.numeroArticulo"}
-                    onChange={"handleInputChange"}
+                    value={articleData.numeroArticulo}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -51,22 +133,34 @@ const EditArticle = ({close}) => {
                     id="nombreDelDelito"
                     name="nombreDelDelito"
                     placeholder="e.g., Violación de Datos Personales"
-                    value={"formData.nombreDelDelito"}
-                    onChange={"handleInputChange"}
+                    value={articleData.nombreDelDelito}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="shortDescription">Descripción Corta *</Label>
+                <Label htmlFor="shortDescription">Descripción *</Label>
                 <Textarea
                   id="shortDescription"
                   name="shortDescription"
                   placeholder="Descripción breve del delito"
                   rows={4}
-                  value={"formData.shortDescription"}
-                  onChange={"handleInputChange"}
+                  value={articleData.shortDescription}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2 w-full">
+                <Label htmlFor="shortDescription">Imagen *</Label>
+                <Input
+                  id="image"
+                  name="image"
+                  placeholder="URL de la imagen"                  
+                  value={articleData.image}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -78,14 +172,15 @@ const EditArticle = ({close}) => {
                     id="label"
                     name="label"
                     placeholder="e.g., Procesos"
-                    value={"formData.label"}
-                    onChange={"handleInputChange"}
+                    value={articleData.label}
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="estadoPublicacion">Estado de Publicación *</Label>
                   <Select
-                    value={"formData.estadoPublicacion"}                    
+                    value={articleData.estadoPublicacion}
+                    onValueChange={(value) => handleSelectChange("estadoPublicacion", value)}                    
                   >
                     <SelectTrigger id="estadoPublicacion">
                       <SelectValue />
@@ -115,8 +210,8 @@ const EditArticle = ({close}) => {
                     id="codigoPenal"
                     name="codigoPenal"
                     placeholder="e.g., Ley 599 de 2000"
-                    value={"formData.codigoPenal"}
-                    onChange={"handleInputChange"}
+                    value={articleData.codigoPenal}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -126,8 +221,8 @@ const EditArticle = ({close}) => {
                     id="leyDeInclusion"
                     name="leyDeInclusion"
                     placeholder="e.g., Ley 1273 de 2009"
-                    value={"formData.leyDeInclusion"}
-                    onChange={"handleInputChange"}
+                    value={articleData.leyDeInclusion}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -140,8 +235,8 @@ const EditArticle = ({close}) => {
                   name="tituloCodigoPenal"
                   placeholder="e.g., Título VII Bis - De los atentados contra la confidencialidad..."
                   rows={3}
-                  value={"formData.tituloCodigoPenal"}
-                  onChange={"handleInputChange"}
+                  value={articleData.tituloCodigoPenal}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -152,8 +247,8 @@ const EditArticle = ({close}) => {
                   id="fechaVigencia"
                   name="fechaVigencia"
                   type="date"
-                  value={"formData.fechaVigencia"}
-                  onChange={"handleInputChange"}
+                  value={articleData.fechaVigencia}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -173,8 +268,8 @@ const EditArticle = ({close}) => {
                   id="bienJuridicoTutelado"
                   name="bienJuridicoTutelado"
                   placeholder="e.g., Protección de la información y de los datos"
-                  value={"formData.bienJuridicoTutelado"}
-                  onChange={"handleInputChange"}
+                  value={articleData.bienJuridicoTutelado}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -186,8 +281,8 @@ const EditArticle = ({close}) => {
                   name="objetoMaterial"
                   placeholder="Descripción del objeto material del delito"
                   rows={3}
-                  value={"formData.objetoMaterial"}
-                  onChange={"handleInputChange"}
+                  value={articleData.objetoMaterial}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -199,8 +294,8 @@ const EditArticle = ({close}) => {
                   name="elementoSubjetivo"
                   placeholder="e.g., Con provecho propio o de un tercero"
                   rows={3}
-                  value={"formData.elementoSubjetivo"}
-                  onChange={"handleInputChange"}
+                  value={articleData.elementoSubjetivo}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
@@ -222,8 +317,8 @@ const EditArticle = ({close}) => {
                     name="penaPrisionMinima"
                     type="number"
                     placeholder="e.g., 48"
-                    value={"formData.penaPrisionMinima"}
-                    onChange={"handleInputChange"}
+                    value={articleData.penaPrisionMinima}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -234,8 +329,8 @@ const EditArticle = ({close}) => {
                     name="penaPrisionMaxima"
                     type="number"
                     placeholder="e.g., 96"
-                    value={"formData.penaPrisionMaxima"}
-                    onChange={"handleInputChange"}
+                    value={articleData.penaPrisionMaxima}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -246,8 +341,8 @@ const EditArticle = ({close}) => {
                     name="multaMinima"
                     type="number"
                     placeholder="e.g., 100"
-                    value={"formData.multaMinima"}
-                    onChange={"handleInputChange"}
+                    value={articleData.multaMinima}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -258,8 +353,8 @@ const EditArticle = ({close}) => {
                     name="multaMaxima"
                     type="number"
                     placeholder="e.g., 1000"
-                    value={"formData.multaMaxima"}
-                    onChange={"handleInputChange"}
+                    value={articleData.multaMaxima}
+                    onChange={handleInputChange}
                     required
                   />
                 </div>
@@ -281,8 +376,8 @@ const EditArticle = ({close}) => {
                   name="circunstanciasAgravacion"
                   placeholder="Detalles sobre circunstancias agravantes"
                   rows={4}
-                  value={"formData.circunstanciasAgravacion"}
-                  onChange={"handleInputChange"}
+                  value={articleData.circunstanciasAgravacion}
+                  onChange={handleInputChange}
                 />
               </div>
             </CardContent>
@@ -293,8 +388,7 @@ const EditArticle = ({close}) => {
               <Button className={"cursor-pointer"} type="button" variant="outline" onClick={close}>
                 Cancelar
               </Button>
-            <Button type="submit" disabled={"isSubmitting"} className="bg-primary hover:bg-primary/90">
-              {/* {isSubmitting ? "Cargando..." : "Cargar Artículo"} */}
+            <Button onClick={() => {setTimeout(navigate("/"), 10000)}} type="submit" disabled={isSubmitting} className="bg-primary hover:bg-primary/90 cursor-pointer">              
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
           </div>

@@ -7,8 +7,6 @@ import NotFound from './components/utils/NotFound.jsx'
 import Login from './pages/login/Login.jsx'
 import SaveUser from './pages/admin/section/SaveUser.jsx'
 import UserProfile from './pages/admin/section/UserProfile.jsx'
-import AllUsers from './pages/admin/section/AllUsers.jsx'
-import UpdateUser from './pages/admin/section/UpdateUser.jsx'
 import Register from './pages/register/Register.jsx'
 import Articles from './pages/general/Articles.jsx'
 import Article from './components/layout/Article.jsx'
@@ -24,16 +22,13 @@ import ModeratorArticles from './pages/moderator/sections/ModeratorArticles'
 import RoleProvider from './context/roles/RoleProvider'
 import Dashboard from './pages/admin/section/Dashboard'
 import TableTasks from './pages/admin/section/TableTasks'
+import { useAuthContext, useRoleContext } from './context/roles/roleContext'
 
 // Simula obtener el rol del usuario autenticado
 export const useAuth = () => {
-  // Aquí iría la lógica para obtener el rol, por ejemplo:
-  // const { user } = useMyAuthContext();
-  // return { isAuthenticated: !!user, role: user?.role };
-
-  // **Ejemplo Hardcodeado:**
-  const isAuth = false; // Simula que está autenticado
-  const userRole = ""; // Puede ser "USER", "ADMIN", "MODERATOR", etc.
+  
+  const isAuth = useAuthContext(); // Simula que está autenticado
+  const userRole = useRoleContext(); // Puede ser "USER", "ADMIN", "MODERATOR", etc.
   return { isAuth, userRole };
 };
 
@@ -145,7 +140,7 @@ const router = createBrowserRouter([
                   },
                   {
                     path: "articulos",
-                    element: <ModeratorArticles />
+                    element: <Articles />
                   },
                   {
                     path: "articulos/articulo/:articuloId", 

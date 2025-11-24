@@ -69,7 +69,7 @@ const Register = () => {
           <button className="rounded-md bg-[#0c4880] border-0 p-2 cursor-pointer text-xl mt-3">Registrarse</button>  
         </form>
 
-        <p className="mt-4">Ya tienes una cuenta? <Link to={"/login"} className="text-[#40a3f0]">Inicia Sesión</Link></p>
+        <p className="mt-4">Ya tienes una cuenta? <Link to={"/login"} className="text-[#40a3f0] hover:underline">Inicia Sesión</Link></p>
       </article>
       <aside className="col-span-1 p-4">
         <img src={imagenRegistro} className="h-full object-cover opacity-70 rounded-xl" />          

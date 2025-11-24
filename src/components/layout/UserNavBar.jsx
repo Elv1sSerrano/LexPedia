@@ -1,39 +1,69 @@
 import { caretDownPath } from "../../constants/iconPaths"
 import Icon from "../utils/Icon"
 import fotoPerfil from "@/assets/images/fotoPerfil.png"
-import { Link, Navigate } from "react-router-dom"
-import { useState } from "react"
+import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
 import Modal from "../ui/Modal"
 import { LogOut, UserRoundPen } from "lucide-react"
-
-const userData = [
-  {id: 1, name: "Elvis", email: "elvis@gmail.com", passwordHash: "adfasfasf", fechaRegistro: new Date("2025-11-19T21:54:00"), estado: "activo", articulosGuardados: []}
-]
-
-const userNavBar = [
-  {name: "inicio", direction: ""},  
-  {name: "Guardados", direction: "guardados"},
-]
-
-const logOut = () => {
-
-  
-}
-
-const modalData = [
-  {icon: <UserRoundPen /> , name: "Perfil", action: ""},
-  {icon: <LogOut /> , name: "Cerrar Sesión", action: logOut}
-]
+import axios from "axios"
+import { useAuthToggleContext, useRoleToggleContext, useUserIdContext, useUserIdToggleContext } from "@/context/roles/roleContext"
+import Loader from "../ui/Loader"
 
 const UserNavBar = () => {  
 
+  const setId = useUserIdToggleContext()
+  const setAuth = useAuthToggleContext()
+  const setRole = useRoleToggleContext()
+
+  const nada = () => {
+
+  }
+
+  
+  const logOut = () => {
+    setId(null)
+    setAuth(false)
+    setRole("")
+  }
+
+  const userNavBar = [
+    {name: "inicio", direction: ""},  
+    {name: "Guardados", direction: "guardados"},
+  ]
+  
+  const modalData = [
+    {icon: <UserRoundPen /> , name: "Perfil", action: nada},
+    {icon: <LogOut /> , name: "Cerrar Sesión", action: logOut}
+  ]
+
+  
+  const id = useUserIdContext()
+
+  const [userData, setUserData] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
 
   const handleOpenSettings = () => {
     setIsOpen(!isOpen)    
   }
 
+  useEffect(() => {
+
+    if (!id) return
+    
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/usuarios/${id}`)
+        setUserData(response.data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    fetchData()
+
+  }, [id])
   
+  if(!userData) return <Loader />
 
   return (
     <nav className="sticky flex flex-row justify-between items-center gap-2 w-full h-18 bg-[#1787e0] p-4">
@@ -47,17 +77,15 @@ const UserNavBar = () => {
           ))}
         </ul>
       </div>      
-      {
-        userData.map((user, index) => (
-          <div key={index} className="relative flex flex-row gap-2 items-center">
-            <img src={fotoPerfil} alt={user.name} className="w-10 rounded-full" />
-            <p>{user.name}</p>
-            <button className="cursor-pointer" onClick={handleOpenSettings}>
-              <Icon width={24} height={24} paths={caretDownPath} color={"#fff"} />
-            </button>
-            { isOpen && <Modal fields={modalData} /> }
-          </div>
-        ))
+      {        
+        <div className="relative flex flex-row gap-2 items-center">
+          <img src={fotoPerfil} alt={userData.firstName} className="w-10 rounded-full" />
+          <p>{userData.firstName} {userData.lastName}</p>
+          <button className="cursor-pointer" onClick={handleOpenSettings}>
+            <Icon width={24} height={24} paths={caretDownPath} color={"#fff"} />
+          </button>
+          { isOpen && <Modal fields={modalData} /> }
+        </div>        
       }      
     </nav>
   )

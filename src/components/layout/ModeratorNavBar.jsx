@@ -1,35 +1,67 @@
 import fotoPerfil from "@/assets/images/fotoPerfil.png"
 import { caretDownPath } from "@/constants/iconPaths"
 import Icon from "../utils/Icon"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Modal from "../ui/Modal"
 import { UserRoundPen, LogOut } from "lucide-react"
 import { Link } from "react-router-dom"
-
-
-const moderatorData = {
-  fotoPerfil: fotoPerfil,
-  name: "Julian P"
-}
-
-const modaratorNavLinks = [
-  {name: "Tareas", direction: "tasks"},
-  {name: "Crear artículo", direction: "create"},
-  {name: "Artículos", direction: "articulos"},
-]
-
-const modalData = [
-  {icon: <UserRoundPen /> , name: "Perfil", action: ""},
-  {icon: <LogOut /> , name: "Cerrar Sesión", action: ""}
-]
+import { useAuthToggleContext, useRoleToggleContext, useUserIdContext, useUserIdToggleContext } from "@/context/roles/roleContext"
+import axios from "axios"
+import Loader from "../ui/Loader"
 
 const ModeratorNavBar = () => {
 
+  const id = useUserIdContext()
+  const setId = useUserIdToggleContext()
+  const setAuth = useAuthToggleContext()
+  const setRole = useRoleToggleContext()
+  
+  const logOut = () => {
+    setId(null)
+    setAuth(false)
+    setRole("")
+  }
+
+  const nada = () => {
+
+  }
+
+  const modaratorNavLinks = [
+    {name: "Tareas", direction: "tasks"},
+    {name: "Crear artículo", direction: "create"},
+    {name: "Artículos", direction: "articulos"},
+  ]
+
+  const modalData = [
+    {icon: <UserRoundPen /> , name: "Perfil", action: nada},
+    {icon: <LogOut /> , name: "Cerrar Sesión", action: logOut}
+  ]
+
+  const [ userData, setUserData ] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+
+    if (!id) return
+    
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/usuarios/${id}`)
+        setUserData(response.data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    fetchData()
+
+  }, [id])
   
   const handleOpenSettings = () => {
     setIsOpen(!isOpen)    
   }
+
+  if(!userData) return <Loader />
 
   return (
     <nav className="sticky flex flex-row justify-between items-center gap-2 w-full h-18 bg-[#1787e0] p-4">
@@ -44,8 +76,8 @@ const ModeratorNavBar = () => {
         </ul>
       </div>                 
       <div className="relative flex flex-row gap-2 items-center">
-        <img src={moderatorData.fotoPerfil} alt={moderatorData.name} className="w-10 rounded-full" />
-        <p>{moderatorData.name}</p>
+        <img src={fotoPerfil} alt={userData.firstName} className="w-10 rounded-full" />
+        <p>{userData.firstName}</p>
         <button className="cursor-pointer" onClick={handleOpenSettings}>
           <Icon width={24} height={24} paths={caretDownPath} color={"#fff"} />
         </button>

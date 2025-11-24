@@ -1,56 +1,75 @@
-import { Card, CardDescription, CardFooter, CardHeader } from "@/components/ui/card"
-import { Badge, CircleCheck, Clock, ClockAlert, X } from "lucide-react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react";
+import { Card, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
+import { Badge, CircleCheck, Clock, ClockAlert, X } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const Modal = ({dateCreated, priority, dateLimit, description, close}) => {
+const Modal = ({ task, close, onUpdate }) => {
+
+  const [ stateValue, setStateValue ] = useState(task.state);
+
+  const handleStateChange = (value) => {
+    setStateValue(value);
+    
+    onUpdate(task.id, {
+      ...task,
+      state: value,
+    });
+  };
+
   return (
-    <Card className={"w-md absolute right-5 top-5 z-40"}>
-      <CardHeader> 
+    <Card className="w-md absolute right-5 bottom-5 z-30 shadow-xl border">
+      <CardHeader className="flex justify-between">
+        <h2 className="font-bold text-xl">Detalles de la tarea</h2>
         <button onClick={close} className="cursor-pointer">
-          <X />        
-        </button>       
+          <X />
+        </button>
       </CardHeader>
+
       <hr />
-      <CardDescription className={"grid grid-cols-2 gap-3 p-2"}>
-        <div className="flex gap-2">
+
+      <CardDescription className="grid grid-cols-2 gap-3 p-4">
+        <div className="flex gap-2 items-center">
           <Clock />
           <p>Creada el</p>
         </div>
-        <p>{dateCreated}</p>
-        <div className="flex gap-2">
+        <p>{task.dateCreated}</p>
+
+        <div className="flex gap-2 items-center">
           <Badge />
           <p>Estado</p>
         </div>
-        <Select
-          value={""}
-          // onValueChange={(value) => handleSelectChange("estadoPublicacion", value)}
-        >
-          <SelectTrigger id="estadoPublicacion">
-            <SelectValue />
+
+        {/* Select para cambiar estado */}
+        <Select value={stateValue} onValueChange={handleStateChange}>
+          <SelectTrigger>
+            <SelectValue placeholder="Seleccionar estado" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="TODO">Por hacer</SelectItem>
-            <SelectItem value="INPROCESS">En proceso</SelectItem>
-            <SelectItem value="COMPLETED">Completado</SelectItem>
+            <SelectItem value="Pendiente">Por hacer</SelectItem>
+            <SelectItem value="Proceso">En proceso</SelectItem>
+            <SelectItem value="Completado">Completado</SelectItem>
           </SelectContent>
         </Select>
-        <div className="flex gap-2">
+
+        <div className="flex gap-2 items-center">
           <CircleCheck />
           <p>Prioridad</p>
         </div>
-        <p>{priority}</p>
-        <div className="flex gap-2">
+        <p>{task.priority}</p>
+
+        <div className="flex gap-2 items-center">
           <ClockAlert />
-          <p>Fecha limite</p>
+          <p>Fecha límite</p>
         </div>
-        <p>{dateLimit}</p>
+        <p>{task.dateLimit}</p>
       </CardDescription>
-      <CardFooter className={"flex flex-col gap-2"}>
-        <h3>Descripción</h3>
-        <p>{description}</p>
+
+      <CardFooter className="flex flex-col gap-2 p-4">
+        <h3 className="font-semibold text-lg">Descripción</h3>
+        <p>{task.description}</p>
       </CardFooter>
     </Card>
-  )
-}
+  );
+};
 
-export default Modal
+export default Modal;

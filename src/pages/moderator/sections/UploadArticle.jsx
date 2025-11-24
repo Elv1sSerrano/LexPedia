@@ -6,8 +6,14 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Upload, ArrowRight } from "lucide-react"
+import { toast } from "react-toastify"
+import axios from "axios"
+import Loader from "@/components/ui/Loader"
+import { useUserIdContext } from "@/context/roles/roleContext"
 
   const UploadArticle = () => {
+
+    const userId = useUserIdContext()
     
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [formData, setFormData] = useState({
@@ -29,6 +35,7 @@ import { Upload, ArrowRight } from "lucide-react"
       circunstanciasAgravacion: "",
       estadoPublicacion: "PUBLICADO",
       label: "",
+      image: "",
     })
   
     const handleInputChange = (e) => {
@@ -44,16 +51,39 @@ import { Upload, ArrowRight } from "lucide-react"
         ...prev,
         [name]: value,
       }))
-    }
+    }    
   
     const handleSubmit = async (e) => {
       e.preventDefault()
-      setIsSubmitting(true)
-    
+      setIsSubmitting(true)      
+      
+      const dto = {
+        numeroArticulo: formData.numeroArticulo,
+        nombreDelDelito: formData.nombreDelDelito,
+        image: formData.image,                   // ✔️ ahora coincide
+        label: formData.label,
+        shortDescription: formData.shortDescription,
+        codigoPenal: formData.codigoPenal,
+        tituloCodigoPenal: formData.tituloCodigoPenal,
+        leyDeInclusion: formData.leyDeInclusion,
+        fechaVigencia: formData.fechaVigencia,   // YYYY-MM-DD (OK para LocalDate)
+        bienJuridicoTutelado: formData.bienJuridicoTutelado,
+        objetoMaterial: formData.objetoMaterial,
+        elementoSubjetivo: formData.elementoSubjetivo,
+        penaPrisionMinima: Number(formData.penaPrisionMinima),
+        penaPrisionMaxima: Number(formData.penaPrisionMaxima),
+        multaMinima: Number(formData.multaMinima),
+        multaMaxima: Number(formData.multaMaxima),
+        circunstanciasAgravacion: formData.circunstanciasAgravacion,
+        estadoPublicacion: formData.estadoPublicacion,
+        fechaPublicacion: new Date().toISOString(),   // ✔️ formato LocalDateTime
+        autorId: userId                                // ✔️ corregido camelCase
+      };
+
+
       try {
         // Simulate API call
-        console.log("Submitting article:", formData)
-        await new Promise((resolve) => setTimeout(resolve, 1000))
+        await axios.post("http://localhost:8080/api/articulos", dto)
       
         // Reset form
         setFormData({
@@ -75,14 +105,16 @@ import { Upload, ArrowRight } from "lucide-react"
           estadoPublicacion: "PUBLICADO",
           label: "",
         })
-        alert("Article uploaded successfully!")
+        toast.success("Artículo subido correctamente")
       } catch (error) {
         console.error("Error uploading article:", error)
-        alert("Error uploading article")
+        toast.error("Error al subir el artículo")
       } finally {
         setIsSubmitting(false)
       }
     }  
+
+    if(isSubmitting) return <Loader />
 
   return (
     <main className="min-h-screen bg-linear-to-br from-slate-950 to-slate-900 p-6 md:p-12">
@@ -132,13 +164,25 @@ import { Upload, ArrowRight } from "lucide-react"
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="shortDescription">Descripción Corta *</Label>
+                <Label htmlFor="shortDescription">Descripción *</Label>
                 <Textarea
                   id="shortDescription"
                   name="shortDescription"
                   placeholder="Descripción breve del delito"
                   rows={4}
                   value={formData.shortDescription}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="shortDescription">Imagen *</Label>
+                <Input
+                  id="image"
+                  name="image"
+                  placeholder="URL de la imagen"                  
+                  value={formData.image}
                   onChange={handleInputChange}
                   required
                 />
@@ -364,10 +408,10 @@ import { Upload, ArrowRight } from "lucide-react"
 
           {/* Form Actions */}
           <div className="flex gap-4 justify-between pt-6">
-              <Button type="button" variant="outline">
+              <Button type="button" variant="outline" className={"cursor-pointer"}>
                 Cancelar
               </Button>
-            <Button type="submit" disabled={isSubmitting} className="bg-primary hover:bg-primary/90">
+            <Button type="submit" disabled={isSubmitting} className="bg-primary hover:bg-primary/90 cursor-pointer">
               {isSubmitting ? "Cargando..." : "Cargar Artículo"}
               <ArrowRight className="ml-2 w-4 h-4" />
             </Button>
