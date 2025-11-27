@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 const Task = ({title, description, state, dateLimit, openModal}) => {
@@ -5,9 +6,9 @@ const Task = ({title, description, state, dateLimit, openModal}) => {
     <button className="cursor-pointer" onClick={openModal}>
       <Card className={"w-md text-left"}>
         <CardHeader>
-          <div className="p-2 bg-amber-300 rounded-2xl w-fit">
-            <p className="font-semibold">{state}</p>
-          </div>
+          <Badge>
+            {state}
+          </Badge>
           <CardTitle>
             <h3 className="font-semibold text-xl">
               {title}

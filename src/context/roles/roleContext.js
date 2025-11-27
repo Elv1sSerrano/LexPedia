@@ -12,6 +12,10 @@ export const AuthContext = createContext()
 
 export const AuthToggleContext = createContext()
 
+export const SavedArticlesContext = createContext()
+
+export const SavedArticlesToggleContext = createContext()
+
 export function useUserIdContext() {
   return useContext(UserIdContext)
 }
@@ -34,4 +38,12 @@ export function useAuthContext() {
 
 export function useAuthToggleContext() {
   return useContext(AuthToggleContext)
+}
+
+export function useSavedArticlesContext () {
+  return useContext(SavedArticlesContext)
+}
+
+export function useSavedArticlesToggleContext () {
+  return useContext(SavedArticlesToggleContext)
 }

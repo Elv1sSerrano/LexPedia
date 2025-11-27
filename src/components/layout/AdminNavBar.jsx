@@ -1,10 +1,13 @@
-import fotoPerfil from "@/assets/images/fotoPerfil.png"
-import { caretDownPath } from "@/constants/iconPaths"
+import { caretDownPath } from "../../constants/iconPaths"
 import Icon from "../utils/Icon"
-import { useState } from "react"
-import Modal from "../ui/Modal"
-import { UserRoundPen, LogOut } from "lucide-react"
+import fotoPerfil from "@/assets/images/fotoPerfil.png"
 import { Link } from "react-router-dom"
+import { useEffect, useState } from "react"
+import Modal from "../ui/Modal"
+import { LogOut, UserRoundPen } from "lucide-react"
+import axios from "axios"
+import { useAuthToggleContext, useRoleToggleContext, useUserIdContext, useUserIdToggleContext } from "@/context/roles/roleContext"
+import Loader from "../ui/Loader"
 
 
 const moderatorData = {
@@ -19,13 +22,49 @@ const modaratorNavLinks = [
   {name: "Articulos", direction: "articulos"},
 ]
 
-const modalData = [
-  {icon: <UserRoundPen /> , name: "Perfil", action: ""},
-  {icon: <LogOut /> , name: "Cerrar Sesión", action: ""}
-]
-
 const AdminNavBar = () => {
+
+  const setId = useUserIdToggleContext()
+  const setAuth = useAuthToggleContext()
+  const setRole = useRoleToggleContext()
+  const id = useUserIdContext()  
+
+  const [userData, setUserData] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+
+    if (!id) return
+    
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/usuarios/${id}`)
+        setUserData(response.data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    fetchData()
+
+  }, [id])
+  
+  if(!userData) return <Loader />
+
+  const nada = () => {
+
+  }
+  
+  const logOut = () => {
+    setId(null)
+    setAuth(false)
+    setRole("")
+  }  
+
+  const modalData = [
+    {icon: <UserRoundPen /> , name: "Perfil", action: nada},
+    {icon: <LogOut /> , name: "Cerrar Sesión", action: logOut}
+  ]
   
   const handleOpenSettings = () => {
     setIsOpen(!isOpen)    

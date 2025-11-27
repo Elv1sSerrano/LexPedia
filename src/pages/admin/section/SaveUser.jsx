@@ -12,6 +12,7 @@ const SaveUser = () => {
     { title: "Primer Nombre", value: firstName, setter: setfirstName, placeholder: "Ingrese su nombre" },
     { title: "Apellido", value: lastName, setter: setlastName, placeholder: "Ingrese su apellido" },
     { title: "Correo electrónico", value: email, setter: setEmail, placeholder: "Ingrese su correo electrónico" },
+    { title: "Contraseña", value: email, setter: setEmail, placeholder: "Ingrese la contraseña" },
   ]
 
   function handleSubmit(e) {

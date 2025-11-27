@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertCircle, FileText, Scale, Calendar, Bookmark } from "lucide-react"
 import CommentsSection from "@/components/layout/CommentsSections"
-import { useRoleContext } from "@/context/roles/roleContext"
+import { useRoleContext, useSavedArticlesToggleContext } from "@/context/roles/roleContext"
 import EditArticle from "@/pages/moderator/sections/EditArticle"
 import { useEffect, useState } from "react"
 import DeleteModal from "@/pages/moderator/components/DeleteModal"
@@ -12,6 +12,8 @@ import axios from "axios"
 import Loader from "../ui/Loader"
 
 const Article = () => {    
+
+  const saveArticle = useSavedArticlesToggleContext()
 
   const role = useRoleContext()
   const validRoles = role === "MODERATOR" 
@@ -83,7 +85,11 @@ const Article = () => {
               <Badge className="bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap">
                 {articleData.estadoPublicacion}
               </Badge>
-              <Bookmark className="w-6 h-6 text-yellow-300" />
+              <button className="cursor-pointer" onClick={() => {
+                saveArticle(prev => [...prev, articleData])
+              }}>
+                <Bookmark className="w-6 h-6 text-yellow-300" />
+              </button>              
             </div>
           </div>
 

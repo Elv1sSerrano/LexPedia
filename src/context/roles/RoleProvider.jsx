@@ -1,12 +1,13 @@
 import { useState } from "react"
 
-import { AuthContext, AuthToggleContext, RoleContext, RoleToggleContext, UserIdContext, UserIdToggleContext } from "./roleContext.js"
+import { AuthContext, AuthToggleContext, RoleContext, RoleToggleContext, SavedArticlesContext, SavedArticlesToggleContext, UserIdContext, UserIdToggleContext } from "./roleContext.js"
 
 const RoleProvider = ({ children }) => {
 
   const [ role, setRole ] = useState("")
   const [ id, setId ] = useState(null)
   const [ auth, setAuth ] = useState(false)
+  const [ savedArticles, setSavedArticles ] = useState([])
 
   return (
     <RoleContext.Provider value={role}>
@@ -15,7 +16,11 @@ const RoleProvider = ({ children }) => {
           <UserIdToggleContext.Provider value={setId}>
             <AuthContext.Provider value={auth}>
               <AuthToggleContext.Provider value={setAuth}>
-                {children}
+                <SavedArticlesContext.Provider value={savedArticles}>
+                  <SavedArticlesToggleContext.Provider value={setSavedArticles}>
+                    {children}
+                  </SavedArticlesToggleContext.Provider>                  
+                </SavedArticlesContext.Provider>                  
               </AuthToggleContext.Provider>
             </AuthContext.Provider>
           </UserIdToggleContext.Provider>
