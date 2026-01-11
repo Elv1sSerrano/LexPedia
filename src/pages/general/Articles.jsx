@@ -10,7 +10,7 @@ const Articles = () => {
   const [searchValue, setSearchValue] = useState("")
   const [filterStatus, setFilterStatus] = useState("TODOS")
 
-  const filterOptions = ["TODOS", "VIGENTE", "NO_VIGENTE", "DEROGADO", "MODIFICADO"]
+  const filterOptions = ["TODOS", "NO_VIGENTE", "DEROGADO", "MODIFICADO"]
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +44,7 @@ const Articles = () => {
       />
 
       {/* Filtros */}
-      <div className="flex gap-3 flex-wrap">
+      <div className="flex gap-3 flex-wrap justify-center">
         {filterOptions.map(option => (
           <button
             key={option}

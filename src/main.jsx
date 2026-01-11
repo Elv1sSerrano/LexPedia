@@ -18,17 +18,15 @@ import AdminLayout from './pages/admin/AdminLayout'
 import ModeratorLayout from './pages/moderator/ModeratorLayout'
 import Tasks from './pages/moderator/sections/Tasks'
 import UploadArticle from './pages/moderator/sections/UploadArticle'
-import ModeratorArticles from './pages/moderator/sections/ModeratorArticles'
 import RoleProvider from './context/roles/RoleProvider'
 import Dashboard from './pages/admin/section/Dashboard'
 import TableTasks from './pages/admin/section/TableTasks'
 import { useAuthContext, useRoleContext } from './context/roles/roleContext'
 
-// Simula obtener el rol del usuario autenticado
 export const useAuth = () => {
   
-  const isAuth = useAuthContext(); // Simula que está autenticado
-  const userRole = useRoleContext(); // Puede ser "USER", "ADMIN", "MODERATOR", etc.
+  const isAuth = useAuthContext();
+  const userRole = useRoleContext();
   return { isAuth, userRole };
 };
 
@@ -89,7 +87,7 @@ const router = createBrowserRouter([
                 element: <ProtectedRoute allowedRoles={["ADMIN"]}> 
                     <AdminLayout /> 
                 </ProtectedRoute>,
-                // Subrutas de Admin, por ejemplo:
+                // Subrutas de Admin
                 children: [
                     { 
                       index: true,

@@ -8,8 +8,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
       return <Navigate to="/login" replace />;
     }
     
-    if (allowedRoles && !allowedRoles.includes(userRole)) {
-      // Podrías redirigir a una página de "Acceso Denegado" o a la raíz
+    if (allowedRoles && !allowedRoles.includes(userRole)) {      
       return <Navigate to="/404" replace />;
     }
     
